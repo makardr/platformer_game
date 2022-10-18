@@ -1,6 +1,7 @@
 package com.myplatformergdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Scenes.Hud;
+import com.myplatformergdx.game.Sprites.Protagonist;
 
 public class PlayScreen implements Screen {
     private MyPlatformerGame game;
@@ -37,6 +39,9 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
 
+    //    Player object
+    private Protagonist player;
+
     public PlayScreen(MyPlatformerGame game) {
         this.game = game;
 
@@ -44,7 +49,7 @@ public class PlayScreen implements Screen {
 //        Create camera
         gameCam = new OrthographicCamera();
 //        Camera type
-        gamePort = new FitViewport(MyPlatformerGame.V_WIDTH, MyPlatformerGame.V_HEIGHT, gameCam);
+        gamePort = new FitViewport(MyPlatformerGame.V_WIDTH / MyPlatformerGame.PPM, MyPlatformerGame.V_HEIGHT / MyPlatformerGame.PPM, gameCam);
 
 //        create hud
         hud = new Hud(game.batch);
@@ -52,14 +57,18 @@ public class PlayScreen implements Screen {
 //      load map and setup map renderer
         maploader = new TmxMapLoader();
         map = maploader.load("level1.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);
+        renderer = new OrthogonalTiledMapRenderer(map, 1 / MyPlatformerGame.PPM);
 //      initially set gamecam to be centered at the start
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
+
 //        box2d
 //        (gravity, put objects to rest)
-        world = new World(new Vector2(0, 0), true);
+        world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
+
+//      Initialize player class object
+        player = new Protagonist(world);
 
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -88,13 +97,13 @@ public class PlayScreen implements Screen {
 //            Setup body
 //            Body types: DynamicBody - like player, can move, StaticBody - does not move, KinematicBody - arent affected by forces, but can be affected by velocity
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / MyPlatformerGame.PPM);
 
 //            Add body to box2d
             body = world.createBody(bdef);
 //            Define polygon shape
 //            Divide by 2 because it starts in the center
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            shape.setAsBox((rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getHeight() / 2) / MyPlatformerGame.PPM);
             fdef.shape = shape;
             body.createFixture(fdef);
         }
@@ -104,11 +113,11 @@ public class PlayScreen implements Screen {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / MyPlatformerGame.PPM);
 
             body = world.createBody(bdef);
 
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            shape.setAsBox((rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getHeight() / 2) / MyPlatformerGame.PPM);
             fdef.shape = shape;
             body.createFixture(fdef);
         }
@@ -117,11 +126,11 @@ public class PlayScreen implements Screen {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / MyPlatformerGame.PPM);
 
             body = world.createBody(bdef);
 
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            shape.setAsBox((rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getHeight() / 2) / MyPlatformerGame.PPM);
             fdef.shape = shape;
             body.createFixture(fdef);
         }
@@ -130,11 +139,11 @@ public class PlayScreen implements Screen {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / MyPlatformerGame.PPM);
 
             body = world.createBody(bdef);
 
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            shape.setAsBox((rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getHeight() / 2) / MyPlatformerGame.PPM);
             fdef.shape = shape;
             body.createFixture(fdef);
         }
@@ -147,21 +156,42 @@ public class PlayScreen implements Screen {
 
 
     public void handleInput(float deltatime) {
-        if (Gdx.input.isTouched())
-            gameCam.position.x += 100 * deltatime;
+//        To move a subject physics way can be used either force or impulse
+//        Force - gradual increase in speed
+//        Impulse - immediate change
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+//            (Vector2(speed in x, speed in y),where in the body apply force, "wake up" body)
+            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) {
+            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2) {
+            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+        }
     }
 
     //  global world update
     public void update(float deltatime) {
+//        handle user input
         handleInput(deltatime);
+//      takes timestamp of velocity and position iterations - step(60 times second,velocity, position)
+        world.step(1 / 60f, 6, 2);
+//      track camera with a gamecam
+        gameCam.position.x = player.b2body.getPosition().x;
+        gameCam.position.y = player.b2body.getPosition().y;
+//        update gamecam with changed coordinates
         gameCam.update();
+//        set renderer to draw only what is currently in the camera
         renderer.setView(gameCam);
+
     }
 
 
     //    delta is called constantly
     @Override
     public void render(float delta) {
+//        Update world
         update(delta);
 
 //        clear screen

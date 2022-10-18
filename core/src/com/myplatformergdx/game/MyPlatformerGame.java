@@ -8,6 +8,8 @@ public class MyPlatformerGame extends Game {
     public static final int V_WIDTH = 400;
     public static final int V_HEIGHT = 208;
     public SpriteBatch batch;
+    //    PPM = pixels per meter, dividing by this converts the world from standard meters to centimeters
+    public static final float PPM = 100;
 
     @Override
     public void create() {
