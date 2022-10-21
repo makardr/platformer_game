@@ -5,24 +5,18 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Scenes.Hud;
 import com.myplatformergdx.game.Sprites.Protagonist;
+import com.myplatformergdx.game.Tools.B2WorldCreator;
 
 public class PlayScreen implements Screen {
     private MyPlatformerGame game;
@@ -43,8 +37,8 @@ public class PlayScreen implements Screen {
     private Protagonist player;
 
     public PlayScreen(MyPlatformerGame game) {
-        this.game = game;
 
+        this.game = game;
 
 //        Create camera
         gameCam = new OrthographicCamera();
@@ -70,83 +64,8 @@ public class PlayScreen implements Screen {
 //      Initialize player class object
         player = new Protagonist(world);
 
-        BodyDef bdef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
-        Body body;
-
-//        world
-//              Consists of bodies
-//                    Bodies are containers for:
-//                          mass
-//                          velocity
-//                          location
-//                          angle
-//                          fixtures - physical attributes of a body, have:
-//                                  shape
-//                                  density
-//                                  friction
-//                                  restitution - bounciness
-
-
-//        Create ground bodies/fixtures, layer 2
-//       get index in Tiled starts with 0 from the bottom
-        for (MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-//            Setup body
-//            Body types: DynamicBody - like player, can move, StaticBody - does not move, KinematicBody - arent affected by forces, but can be affected by velocity
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / MyPlatformerGame.PPM);
-
-//            Add body to box2d
-            body = world.createBody(bdef);
-//            Define polygon shape
-//            Divide by 2 because it starts in the center
-            shape.setAsBox((rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getHeight() / 2) / MyPlatformerGame.PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-
-        //        Create pipe bodies/fixtures, layer 3
-        for (MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / MyPlatformerGame.PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox((rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getHeight() / 2) / MyPlatformerGame.PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-        //        Create brick bodies/fixtures
-        for (MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / MyPlatformerGame.PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox((rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getHeight() / 2) / MyPlatformerGame.PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-        //        Create coin bodies/fixtures
-        for (MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / MyPlatformerGame.PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox((rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getHeight() / 2) / MyPlatformerGame.PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
+//        Custom world creator
+        new B2WorldCreator(world, map);
     }
 
     @Override
@@ -232,6 +151,10 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        map.dispose();
+        renderer.dispose();
+        world.dispose();
+        b2dr.dispose();
+        hud.dispose();
     }
 }

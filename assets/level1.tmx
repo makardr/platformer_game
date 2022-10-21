@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="39">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="40">
  <tileset firstgid="1" source="tileset_gutter.tsx"/>
  <layer id="1" name="background" width="240" height="13">
   <data encoding="base64" compression="zlib">
@@ -8,7 +8,7 @@
  </layer>
  <layer id="2" name="graphics" width="240" height="13">
   <data encoding="base64" compression="zlib">
-   eJzt2LEJgDAURdFopxu4gm7g/oNpYxMSkB8xCufA620+xJsSAAAAAPzDNKQ0D72/AohYz9vdGu53Dw6IGYMrWYIDAACelbe1Umur9bfaex94R97WSq2ttb9d7vzrwxdE+5W5cfo7AAMCBwU=
+   eJzt2rENgCAURVGw0w1cQTdw/8G0sSHYfEhQc07yepvfXEwJAHibKTgAAPi7Oae05NFfAURs1+3uDfd7BAfE9OxTa3AAAEBfZVurtban/uY9GsYq21qttbX2t5t/UfiKaL8yN854J3/mByE=
   </data>
  </layer>
  <objectgroup id="3" name="ground">
@@ -16,6 +16,7 @@
   <object id="14" x="1105" y="176" width="63" height="16"/>
   <object id="19" x="912" y="160" width="16" height="16"/>
   <object id="34" x="0" y="112" width="224" height="16"/>
+  <object id="39" x="128" y="32" width="224" height="16"/>
  </objectgroup>
  <objectgroup id="4" name="pipes">
   <object id="24" x="672" y="160" width="32" height="32"/>
