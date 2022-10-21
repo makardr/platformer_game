@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -36,10 +37,16 @@ public class PlayScreen implements Screen {
     //    Player object
     private Protagonist player;
 
+    //    Textures
+//    Alternative AssetManager to load more textures and to optimize load
+    private TextureAtlas atlas;
+
     public PlayScreen(MyPlatformerGame game) {
 
         this.game = game;
 
+//        Textures
+        atlas = new TextureAtlas("Mario_and_Enemies.pack");
 //        Create camera
         gameCam = new OrthographicCamera();
 //        Camera type
@@ -62,10 +69,16 @@ public class PlayScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
 
 //      Initialize player class object
-        player = new Protagonist(world);
+        player = new Protagonist(world, this);
 
 //        Custom world creator
         new B2WorldCreator(world, map);
+
+
+    }
+
+    public TextureAtlas getAtlas() {
+        return atlas;
     }
 
     @Override
@@ -96,6 +109,8 @@ public class PlayScreen implements Screen {
         handleInput(deltatime);
 //      takes timestamp of velocity and position iterations - step(60 times second,velocity, position)
         world.step(1 / 60f, 6, 2);
+
+        player.update(deltatime);
 //      track camera with a gamecam
         gameCam.position.x = player.b2body.getPosition().x;
         gameCam.position.y = player.b2body.getPosition().y;
@@ -122,7 +137,18 @@ public class PlayScreen implements Screen {
 //        render Box2dDebugLines
         b2dr.render(world, gameCam.combined);
 
-//        Render what is shown in camera, draw hud
+
+//        Render textures
+//      Set only what is visible inside the main cam
+        game.batch.setProjectionMatrix(gameCam.combined);
+//        Open the textures batch
+        game.batch.begin();
+//      Give the game the sprite
+        player.draw(game.batch);
+//        Close the textures batch
+        game.batch.end();
+
+//        Render what is shown in the camera, draw hud
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
