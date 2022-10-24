@@ -3,9 +3,11 @@ package com.myplatformergdx.game.Sprites;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.myplatformergdx.game.MyPlatformerGame;
@@ -84,8 +86,7 @@ public class Protagonist extends Sprite {
         if ((b2body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
             region.flip(true, false);
             runningRight = false;
-        }
-        else if ((b2body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
+        } else if ((b2body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
             region.flip(true, false);
             runningRight = true;
         }
@@ -99,12 +100,9 @@ public class Protagonist extends Sprite {
 //        based on b2body
         if (b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
             return State.JUMPING;
-        else if (b2body.getLinearVelocity().y < 0)
-            return State.FALLING;
-        else if (b2body.getLinearVelocity().x != 0)
-            return State.RUNNING;
-        else
-            return State.STANDING;
+        else if (b2body.getLinearVelocity().y < 0) return State.FALLING;
+        else if (b2body.getLinearVelocity().x != 0) return State.RUNNING;
+        else return State.STANDING;
     }
 
     public void defineProtagonist() {
@@ -119,6 +117,15 @@ public class Protagonist extends Sprite {
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
+//        Edge shape is a line between two points
+        EdgeShape head = new EdgeShape();
+//        Offset by 2 to the left and 6 from the origin
+        head.set(new Vector2(-2 / MyPlatformerGame.PPM, 6 / MyPlatformerGame.PPM), new Vector2(2 / MyPlatformerGame.PPM, 6 / MyPlatformerGame.PPM));
+        fdef.shape = head;
+//        Remove collision from fixture
+        fdef.isSensor = true;
+//        Allows to identify this head fixture
+        b2body.createFixture(fdef).setUserData("head");
 
     }
 }

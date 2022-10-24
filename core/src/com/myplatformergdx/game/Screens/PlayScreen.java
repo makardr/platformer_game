@@ -18,6 +18,7 @@ import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Scenes.Hud;
 import com.myplatformergdx.game.Sprites.Protagonist;
 import com.myplatformergdx.game.Tools.B2WorldCreator;
+import com.myplatformergdx.game.Tools.WorldContactListener;
 
 public class PlayScreen implements Screen {
     private MyPlatformerGame game;
@@ -74,7 +75,7 @@ public class PlayScreen implements Screen {
 //        Custom world creator
         new B2WorldCreator(world, map);
 
-
+        world.setContactListener(new WorldContactListener());
     }
 
     public TextureAtlas getAtlas() {
