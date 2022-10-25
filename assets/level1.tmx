@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="40">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="65">
  <tileset firstgid="1" source="tileset_gutter.tsx"/>
  <layer id="1" name="background" width="240" height="13">
   <data encoding="base64" compression="zlib">
@@ -8,7 +8,7 @@
  </layer>
  <layer id="2" name="graphics" width="240" height="13">
   <data encoding="base64" compression="zlib">
-   eJzt2rENgCAURVGw0w1cQTdw/8G0sSHYfEhQc07yepvfXEwJAHibKTgAAPi7Oae05NFfAURs1+3uDfd7BAfE9OxTa3AAAEBfZVurtban/uY9GsYq21qttbX2t5t/UfiKaL8yN854J3/mByE=
+   eJzt2sEJgDAQRUH1ph3YgnZg/4WZc4gicSFEZ+CXsBAeGQaA546bAXHGygEAwNfN6eG7ePxCl7Z0u3vD+51eDv4msk+tlQMAAGLlba3U2q76myQHbeVtrdTaovqbvyj0orZfmRunvROp8wU4
   </data>
  </layer>
  <objectgroup id="3" name="ground">
@@ -25,10 +25,25 @@
   <object id="37" x="48" y="80" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="5" name="coins">
-  <object id="30" x="304" y="96" width="224" height="16"/>
-  <object id="32" x="416.5" y="450"/>
+  <object id="46" x="304" y="112" width="224" height="16"/>
+  <object id="48" x="464" y="16" width="112" height="16"/>
  </objectgroup>
  <objectgroup id="6" name="bricks">
-  <object id="22" x="304" y="111.385" width="224" height="17.2308"/>
+  <object id="49" x="560" y="96" width="16" height="16"/>
+  <object id="50" x="576" y="96" width="16" height="16"/>
+  <object id="51" x="592" y="96" width="16" height="16"/>
+  <object id="52" x="608" y="96" width="16" height="16"/>
+  <object id="53" x="624" y="96" width="16" height="16"/>
+  <object id="54" x="640" y="96" width="16" height="16"/>
+  <object id="55" x="656" y="96" width="16" height="16"/>
+  <object id="56" x="672" y="96" width="16" height="16"/>
+  <object id="57" x="688" y="96" width="16" height="16"/>
+  <object id="58" x="704" y="96" width="16" height="16"/>
+  <object id="59" x="720" y="96" width="16" height="16"/>
+  <object id="60" x="736" y="96" width="16" height="16"/>
+  <object id="61" x="752" y="96" width="16" height="16"/>
+  <object id="62" x="768" y="96" width="16" height="16"/>
+  <object id="63" x="784" y="96" width="16" height="16"/>
+  <object id="64" x="800" y="96" width="16" height="16"/>
  </objectgroup>
 </map>

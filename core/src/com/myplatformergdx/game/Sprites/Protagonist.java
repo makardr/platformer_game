@@ -111,9 +111,14 @@ public class Protagonist extends Sprite {
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
+//        Define fixture
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / MyPlatformerGame.PPM);
+//        Set category
+        fdef.filter.categoryBits = MyPlatformerGame.MARIO_BIT;
+//        What protagonist can collide with
+        fdef.filter.maskBits = MyPlatformerGame.DEFAULT_BIT | MyPlatformerGame.COIN_BIT | MyPlatformerGame.BRICK_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
