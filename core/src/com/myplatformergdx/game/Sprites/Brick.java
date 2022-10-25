@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.myplatformergdx.game.MyPlatformerGame;
+import com.myplatformergdx.game.Scenes.Hud;
 
 public class Brick extends InteractiveTileObject {
     public Brick(World world, TiledMap map, Rectangle bounds) {
@@ -19,6 +20,7 @@ public class Brick extends InteractiveTileObject {
         setCategoryFilter(MyPlatformerGame.DESTROYED_BIT);
 //        Remove tile texture
         getCell().setTile(null);
+        Hud.addScore(200);
     }
 
 }

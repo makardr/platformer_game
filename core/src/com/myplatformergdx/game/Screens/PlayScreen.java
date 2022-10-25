@@ -111,7 +111,10 @@ public class PlayScreen implements Screen {
 //      takes timestamp of velocity and position iterations - step(60 times second,velocity, position)
         world.step(1 / 60f, 6, 2);
 
+//        update custom classes
+        hud.update(deltatime);
         player.update(deltatime);
+
 //      track camera with a gamecam
         gameCam.position.x = player.b2body.getPosition().x;
         gameCam.position.y = player.b2body.getPosition().y;

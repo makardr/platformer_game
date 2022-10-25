@@ -15,17 +15,22 @@ import com.myplatformergdx.game.MyPlatformerGame;
 
 
 public class Hud implements Disposable {
+//  Initialize Scene2d.ui and its own viewport for HUD
     public Stage stage;
     private Viewport viewport;
+
+//    Tracking variables
     private Integer worldTimer;
     private float timeCount;
-    private Integer score;
-    Label countdownLabel;
-    Label scoreLabel;
-    Label timeLabel;
-    Label levelLabel;
-    Label worldLabel;
-    Label characterLabel;
+    private static Integer score;
+
+//    Scene2d widgets
+    private Label countdownLabel;
+    private static Label scoreLabel;
+    private Label timeLabel;
+    private Label levelLabel;
+    private Label worldLabel;
+    private Label characterLabel;
 
     public Hud(SpriteBatch sb) {
         worldTimer = 300;
@@ -56,6 +61,20 @@ public class Hud implements Disposable {
 
 //        add table to the stage
         stage.addActor(table);
+    }
+
+    public void update(float dt) {
+        timeCount += dt;
+        if (timeCount >= 1) {
+            worldTimer--;
+            countdownLabel.setText(String.format("%03d", worldTimer));
+            timeCount = 0;
+        }
+    }
+
+    public static void addScore(int value) {
+        score += value;
+        scoreLabel.setText(String.format("%06d", score));
     }
 
     @Override
