@@ -3,6 +3,7 @@ package com.myplatformergdx.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -42,6 +43,8 @@ public class PlayScreen implements Screen {
 //    Alternative AssetManager to load more textures and to optimize load
     private TextureAtlas atlas;
 
+    private Music music;
+
     public PlayScreen(MyPlatformerGame game) {
 
         this.game = game;
@@ -76,6 +79,11 @@ public class PlayScreen implements Screen {
         new B2WorldCreator(world, map);
 
         world.setContactListener(new WorldContactListener());
+
+//        Music
+        music = MyPlatformerGame.manager.get("audio/music/mario_music.ogg", Music.class);
+        music.setLooping(true);
+        music.play();
     }
 
     public TextureAtlas getAtlas() {
