@@ -26,10 +26,10 @@ public class Protagonist extends Sprite {
     private float stateTimer;
     private boolean runningRight;
 
-    public Protagonist(World world, PlayScreen screen) {
+    public Protagonist(PlayScreen screen) {
         //        find texture region for getTexture in later use
         super(screen.getAtlas().findRegion("little_mario"));
-        this.world = world;
+        this.world = screen.getWorld();
 
         currentState = State.STANDING;
         previousState = State.STANDING;
@@ -118,7 +118,7 @@ public class Protagonist extends Sprite {
 //        Set category
         fdef.filter.categoryBits = MyPlatformerGame.MARIO_BIT;
 //        What protagonist can collide with
-        fdef.filter.maskBits = MyPlatformerGame.DEFAULT_BIT | MyPlatformerGame.COIN_BIT | MyPlatformerGame.BRICK_BIT;
+        fdef.filter.maskBits = MyPlatformerGame.GROUND_BIT | MyPlatformerGame.COIN_BIT | MyPlatformerGame.BRICK_BIT | MyPlatformerGame.ENEMY_BIT | MyPlatformerGame.OBJECT_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Scenes.Hud;
+import com.myplatformergdx.game.Sprites.Goomba;
 import com.myplatformergdx.game.Sprites.Protagonist;
 import com.myplatformergdx.game.Tools.B2WorldCreator;
 import com.myplatformergdx.game.Tools.WorldContactListener;
@@ -38,6 +39,7 @@ public class PlayScreen implements Screen {
 
     //    Player object
     private Protagonist player;
+    private Goomba goomba;
 
     //    Textures
 //    Alternative AssetManager to load more textures and to optimize load
@@ -73,17 +75,19 @@ public class PlayScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
 
 //      Initialize player class object
-        player = new Protagonist(world, this);
+        player = new Protagonist(this);
 
 //        Custom world creator
-        new B2WorldCreator(world, map);
+        new B2WorldCreator(this);
 
         world.setContactListener(new WorldContactListener());
 
 //        Music
-        music = MyPlatformerGame.manager.get("audio/music/mario_music.ogg", Music.class);
-        music.setLooping(true);
-        music.play();
+//        music = MyPlatformerGame.manager.get("audio/music/mario_music.ogg", Music.class);
+//        music.setLooping(true);
+//        music.play();
+
+        goomba = new Goomba(this, .32f, .32f);
     }
 
     public TextureAtlas getAtlas() {
@@ -122,7 +126,7 @@ public class PlayScreen implements Screen {
 //        update custom classes
         hud.update(deltatime);
         player.update(deltatime);
-
+        goomba.update(deltatime);
 //      track camera with a gamecam
         gameCam.position.x = player.b2body.getPosition().x;
         gameCam.position.y = player.b2body.getPosition().y;
@@ -157,6 +161,7 @@ public class PlayScreen implements Screen {
         game.batch.begin();
 //      Give the game the sprite
         player.draw(game.batch);
+        goomba.draw(game.batch);
 //        Close the textures batch
         game.batch.end();
 
@@ -170,6 +175,15 @@ public class PlayScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         gamePort.update(width, height);
+    }
+
+
+    public TiledMap getMap() {
+        return map;
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     @Override

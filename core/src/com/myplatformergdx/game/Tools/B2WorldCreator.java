@@ -10,11 +10,15 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.myplatformergdx.game.MyPlatformerGame;
+import com.myplatformergdx.game.Screens.PlayScreen;
 import com.myplatformergdx.game.Sprites.Brick;
 import com.myplatformergdx.game.Sprites.Coin;
 
 public class B2WorldCreator {
-    public B2WorldCreator(World world, TiledMap map) {
+    public B2WorldCreator(PlayScreen screen) {
+        World world = screen.getWorld();
+        TiledMap map = screen.getMap();
+
         //        Create body and fixture variables
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -65,19 +69,20 @@ public class B2WorldCreator {
 
             shape.setAsBox((rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getHeight() / 2) / MyPlatformerGame.PPM);
             fdef.shape = shape;
+            fdef.filter.categoryBits=MyPlatformerGame.OBJECT_BIT;
             body.createFixture(fdef);
         }
         //        Create brick bodies/fixtures
         for (MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new Brick(world, map, rect);
+            new Brick(screen, rect);
         }
         //        Create coin bodies/fixtures
         for (MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new Coin(world, map, rect);
+            new Coin(screen, rect);
         }
     }
 }
