@@ -18,4 +18,6 @@ public abstract class Enemy extends Sprite {
     }
 
     protected abstract void defineEnemy();
+//    Public to contact from WorldContactListener
+    public abstract void hitOnHead();
 }

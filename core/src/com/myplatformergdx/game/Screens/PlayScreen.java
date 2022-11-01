@@ -87,7 +87,7 @@ public class PlayScreen implements Screen {
 //        music.setLooping(true);
 //        music.play();
 
-        goomba = new Goomba(this, .32f, .32f);
+        goomba = new Goomba(this, 1, .32f);
     }
 
     public TextureAtlas getAtlas() {
@@ -121,6 +121,8 @@ public class PlayScreen implements Screen {
 //        handle user input
         handleInput(deltatime);
 //      takes timestamp of velocity and position iterations - step(60 times second,velocity, position)
+//        Calls WorldContactListener, which implements ContactListener
+//        Cant delete bodies from world.step because simulation would not be finished
         world.step(1 / 60f, 6, 2);
 
 //        update custom classes

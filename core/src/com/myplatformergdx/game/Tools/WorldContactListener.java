@@ -5,8 +5,9 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.myplatformergdx.game.Sprites.Enemy;
 import com.myplatformergdx.game.Sprites.InteractiveTileObject;
-
+import com.myplatformergdx.game.MyPlatformerGame;
 
 //Gets called when two fixtures in Box2d collide
 public class WorldContactListener implements ContactListener {
@@ -17,6 +18,9 @@ public class WorldContactListener implements ContactListener {
 //        Contact has two fixtures, this code must identify which one is which
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
+
+//      Collision definition
+        int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
 //        Test if object has the user data of head
         if (fixA.getUserData() == "head" || fixB.getUserData() == "head") {
@@ -29,7 +33,13 @@ public class WorldContactListener implements ContactListener {
                 ((InteractiveTileObject) object.getUserData()).onHeadHit();
             }
         }
-
+        switch (cDef){
+            case MyPlatformerGame.ENEMY_HEAD_BIT | MyPlatformerGame.MARIO_BIT:
+                if(fixA.getFilterData().categoryBits==MyPlatformerGame.ENEMY_HEAD_BIT)
+                    ((Enemy)fixA.getUserData()).hitOnHead();
+                else if(fixB.getFilterData().categoryBits==MyPlatformerGame.ENEMY_HEAD_BIT)
+                    ((Enemy)fixB.getUserData()).hitOnHead();
+        }
     }
 
     // Gets called when two fixtures disconnect from each other
