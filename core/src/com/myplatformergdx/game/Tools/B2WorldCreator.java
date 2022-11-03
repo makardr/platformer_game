@@ -9,12 +9,16 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Screens.PlayScreen;
 import com.myplatformergdx.game.Sprites.Brick;
 import com.myplatformergdx.game.Sprites.Coin;
+import com.myplatformergdx.game.Sprites.Goomba;
 
 public class B2WorldCreator {
+    private Array<Goomba> goombas;
+
     public B2WorldCreator(PlayScreen screen) {
         World world = screen.getWorld();
         TiledMap map = screen.getMap();
@@ -69,7 +73,7 @@ public class B2WorldCreator {
 
             shape.setAsBox((rect.getWidth() / 2) / MyPlatformerGame.PPM, (rect.getHeight() / 2) / MyPlatformerGame.PPM);
             fdef.shape = shape;
-            fdef.filter.categoryBits=MyPlatformerGame.OBJECT_BIT;
+            fdef.filter.categoryBits = MyPlatformerGame.OBJECT_BIT;
             body.createFixture(fdef);
         }
         //        Create brick bodies/fixtures
@@ -81,8 +85,17 @@ public class B2WorldCreator {
         //        Create coin bodies/fixtures
         for (MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
             new Coin(screen, rect);
         }
+//            Create all goombas
+        goombas = new Array<Goomba>();
+        for (MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            goombas.add(new Goomba(screen,rect.getX()/MyPlatformerGame.PPM,rect.getY()/MyPlatformerGame.PPM));
+        }
+    }
+
+    public Array<Goomba> getGoombas() {
+        return goombas;
     }
 }

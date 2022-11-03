@@ -33,4 +33,5 @@ public abstract class Enemy extends Sprite {
         if (y)
             velocity.y = -velocity.y;
     }
+    public abstract void update(float dt);
 }

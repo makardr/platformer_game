@@ -52,6 +52,11 @@ public class WorldContactListener implements ContactListener {
                 break;
             case MyPlatformerGame.MARIO_BIT | MyPlatformerGame.ENEMY_BIT:
                 Gdx.app.log("MARIO", "DIED");
+                break;
+            case MyPlatformerGame.ENEMY_BIT | MyPlatformerGame.ENEMY_BIT:
+                ((Enemy) fixA.getUserData()).reverseVelocity(true, false);
+                ((Enemy) fixB.getUserData()).reverseVelocity(true, false);
+                break;
         }
     }
 
