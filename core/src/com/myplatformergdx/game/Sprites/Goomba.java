@@ -1,6 +1,7 @@
 package com.myplatformergdx.game.Sprites;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -39,7 +40,9 @@ public class Goomba extends Enemy {
             world.destroyBody(b2body);
             destroyed = true;
             setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), 32, 0, 16, 16));
+            stateTime = 0;
         } else if (!destroyed) {
+            b2body.setLinearVelocity(velocity);
 //        -getWidth()/2 to offset sprite by half the width of the sprite, same with height
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
             setRegion(walkAnimation.getKeyFrame(stateTime, true));
@@ -63,7 +66,8 @@ public class Goomba extends Enemy {
         fdef.filter.maskBits = MyPlatformerGame.GROUND_BIT | MyPlatformerGame.COIN_BIT | MyPlatformerGame.BRICK_BIT | MyPlatformerGame.ENEMY_BIT | MyPlatformerGame.OBJECT_BIT | MyPlatformerGame.MARIO_BIT;
 
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+//        Set user data so WorldContactListener could determine what is interacting with what
+        b2body.createFixture(fdef).setUserData(this);
 
         //Create head
         PolygonShape head = new PolygonShape();
@@ -79,6 +83,12 @@ public class Goomba extends Enemy {
         fdef.restitution = 0.5f;
         fdef.filter.categoryBits = MyPlatformerGame.ENEMY_HEAD_BIT;
         b2body.createFixture(fdef).setUserData(this);
+    }
+
+    public void draw(Batch batch) {
+//      texture only drawn if not destroyed || = or stateTime < 1
+        if (!destroyed || stateTime < 1)
+            super.draw(batch);
     }
 
     @Override

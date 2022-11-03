@@ -1,13 +1,14 @@
 package com.myplatformergdx.game.Tools;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Sprites.Enemy;
 import com.myplatformergdx.game.Sprites.InteractiveTileObject;
-import com.myplatformergdx.game.MyPlatformerGame;
 
 //Gets called when two fixtures in Box2d collide
 public class WorldContactListener implements ContactListener {
@@ -33,12 +34,24 @@ public class WorldContactListener implements ContactListener {
                 ((InteractiveTileObject) object.getUserData()).onHeadHit();
             }
         }
-        switch (cDef){
+//        Collision entities
+        switch (cDef) {
+//            Collision for Mario and enemy head
             case MyPlatformerGame.ENEMY_HEAD_BIT | MyPlatformerGame.MARIO_BIT:
-                if(fixA.getFilterData().categoryBits==MyPlatformerGame.ENEMY_HEAD_BIT)
-                    ((Enemy)fixA.getUserData()).hitOnHead();
-                else if(fixB.getFilterData().categoryBits==MyPlatformerGame.ENEMY_HEAD_BIT)
-                    ((Enemy)fixB.getUserData()).hitOnHead();
+                if (fixA.getFilterData().categoryBits == MyPlatformerGame.ENEMY_HEAD_BIT)
+                    ((Enemy) fixA.getUserData()).hitOnHead();
+                else
+                    ((Enemy) fixB.getUserData()).hitOnHead();
+                break;
+//                Collision for enemy with object
+            case MyPlatformerGame.ENEMY_BIT | MyPlatformerGame.OBJECT_BIT:
+                if (fixA.getFilterData().categoryBits == MyPlatformerGame.ENEMY_BIT)
+                    ((Enemy) fixA.getUserData()).reverseVelocity(true, false);
+                else
+                    ((Enemy) fixB.getUserData()).reverseVelocity(true, false);
+                break;
+            case MyPlatformerGame.MARIO_BIT | MyPlatformerGame.ENEMY_BIT:
+                Gdx.app.log("MARIO", "DIED");
         }
     }
 
