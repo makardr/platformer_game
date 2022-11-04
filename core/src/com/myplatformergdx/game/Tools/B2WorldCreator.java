@@ -14,7 +14,7 @@ import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Screens.PlayScreen;
 import com.myplatformergdx.game.Sprites.Brick;
 import com.myplatformergdx.game.Sprites.Coin;
-import com.myplatformergdx.game.Sprites.Goomba;
+import com.myplatformergdx.game.Enemies.Goomba;
 
 public class B2WorldCreator {
     private Array<Goomba> goombas;
@@ -91,7 +91,7 @@ public class B2WorldCreator {
         goombas = new Array<Goomba>();
         for (MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            goombas.add(new Goomba(screen,rect.getX()/MyPlatformerGame.PPM,rect.getY()/MyPlatformerGame.PPM));
+            goombas.add(new Goomba(screen, rect.getX() / MyPlatformerGame.PPM, rect.getY() / MyPlatformerGame.PPM));
         }
     }
 

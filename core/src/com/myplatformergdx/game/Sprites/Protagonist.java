@@ -122,7 +122,7 @@ public class Protagonist extends Sprite {
                 MyPlatformerGame.COIN_BIT |
                 MyPlatformerGame.BRICK_BIT |
                 MyPlatformerGame.ENEMY_BIT |
-                MyPlatformerGame.OBJECT_BIT|
+                MyPlatformerGame.OBJECT_BIT |
                 MyPlatformerGame.ENEMY_HEAD_BIT;
 
         fdef.shape = shape;

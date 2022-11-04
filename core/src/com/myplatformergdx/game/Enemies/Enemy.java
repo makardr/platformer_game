@@ -1,4 +1,4 @@
-package com.myplatformergdx.game.Sprites;
+package com.myplatformergdx.game.Enemies;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +19,8 @@ public abstract class Enemy extends Sprite {
         defineEnemy();
 //        Speed and direction where enemy is moving
         velocity = new Vector2(1, 0);
+//        Put body default to sleep
+        b2body.setActive(false);
     }
 
     protected abstract void defineEnemy();
@@ -33,5 +35,6 @@ public abstract class Enemy extends Sprite {
         if (y)
             velocity.y = -velocity.y;
     }
+
     public abstract void update(float dt);
 }

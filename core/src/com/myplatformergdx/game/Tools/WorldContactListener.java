@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.myplatformergdx.game.MyPlatformerGame;
-import com.myplatformergdx.game.Sprites.Enemy;
+import com.myplatformergdx.game.Enemies.Enemy;
 import com.myplatformergdx.game.Sprites.InteractiveTileObject;
 
 //Gets called when two fixtures in Box2d collide

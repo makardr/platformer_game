@@ -15,10 +15,9 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.myplatformergdx.game.Enemies.Enemy;
 import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Scenes.Hud;
-import com.myplatformergdx.game.Sprites.Enemy;
-import com.myplatformergdx.game.Sprites.Goomba;
 import com.myplatformergdx.game.Sprites.Protagonist;
 import com.myplatformergdx.game.Tools.B2WorldCreator;
 import com.myplatformergdx.game.Tools.WorldContactListener;
@@ -81,7 +80,7 @@ public class PlayScreen implements Screen {
         player = new Protagonist(this);
 
 //        Custom world creator
-        creator= new B2WorldCreator(this);
+        creator = new B2WorldCreator(this);
 
         world.setContactListener(new WorldContactListener());
 
@@ -130,9 +129,14 @@ public class PlayScreen implements Screen {
 //        update custom classes
         hud.update(deltatime);
         player.update(deltatime);
-        for (Enemy enemy: creator.getGoombas())
-            enemy.update(deltatime);
 
+        for (Enemy enemy : creator.getGoombas()) {
+            enemy.update(deltatime);
+//            Wake up body after getting close to it
+            if (enemy.getX() < player.getX() + 224 / MyPlatformerGame.PPM) {
+                enemy.b2body.setActive(true);
+            }
+        }
 //      track camera with a gamecam
         gameCam.position.x = player.b2body.getPosition().x;
         gameCam.position.y = player.b2body.getPosition().y;
@@ -169,7 +173,7 @@ public class PlayScreen implements Screen {
         game.batch.begin();
 //      Give game the player sprite
         player.draw(game.batch);
-        for (Enemy enemy: creator.getGoombas())
+        for (Enemy enemy : creator.getGoombas())
             enemy.draw(game.batch);
 //        Close the textures batch
         game.batch.end();
