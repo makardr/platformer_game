@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.myplatformergdx.game.Items.ItemDef;
+import com.myplatformergdx.game.Items.Mushroom;
 import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Scenes.Hud;
 import com.myplatformergdx.game.Screens.PlayScreen;
@@ -23,10 +26,19 @@ public class Coin extends InteractiveTileObject {
     @Override
     public void onHeadHit() {
         Gdx.app.log("Coin", "Collision");
-        if (getCell().getTile().getId() == BLANK_COIN)
+        if (getCell().getTile().getId() == BLANK_COIN) {
             MyPlatformerGame.manager.get("audio/sounds/bump.wav", Sound.class).play();
-        else
+        } else {
             MyPlatformerGame.manager.get("audio/sounds/coin.wav", Sound.class).play();
+//        Spawn item above the coin that mario hits
+            try {
+                screen.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y + 16 / MyPlatformerGame.PPM), Mushroom.class));
+            } catch (Exception e){
+                Gdx.app.log("COIN", e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
         getCell().setTile(tileSet.getTile(BLANK_COIN));
         Hud.addScore(100);
     }

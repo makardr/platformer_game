@@ -13,14 +13,20 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.myplatformergdx.game.Enemies.Enemy;
+import com.myplatformergdx.game.Items.Item;
+import com.myplatformergdx.game.Items.ItemDef;
+import com.myplatformergdx.game.Items.Mushroom;
 import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Scenes.Hud;
 import com.myplatformergdx.game.Sprites.Protagonist;
 import com.myplatformergdx.game.Tools.B2WorldCreator;
 import com.myplatformergdx.game.Tools.WorldContactListener;
+
+import java.util.PriorityQueue;
 
 public class PlayScreen implements Screen {
     private MyPlatformerGame game;
@@ -42,12 +48,15 @@ public class PlayScreen implements Screen {
 
 
     //    Textures
-//    Alternative AssetManager to load more textures and to optimize load
+//    Alternative is AssetManager to load more textures and to optimize load
     private TextureAtlas atlas;
-
     private Music music;
 
+    //    Array of all items
+    private Array<Item> items;
+    private PriorityQueue<ItemDef> itemsToSpawn;
     private B2WorldCreator creator;
+
 
     public PlayScreen(MyPlatformerGame game) {
 
@@ -60,14 +69,14 @@ public class PlayScreen implements Screen {
 //        Camera type
         gamePort = new FitViewport(MyPlatformerGame.V_WIDTH / MyPlatformerGame.PPM, MyPlatformerGame.V_HEIGHT / MyPlatformerGame.PPM, gameCam);
 
-//        create hud
+//        Create hud
         hud = new Hud(game.batch);
 
 //      load map and setup map renderer
         maploader = new TmxMapLoader();
         map = maploader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MyPlatformerGame.PPM);
-//      initially set gamecam to be centered at the start
+//      Initially set gamecam to be centered at the start
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
 
@@ -89,6 +98,24 @@ public class PlayScreen implements Screen {
 //        music.setLooping(true);
 //        music.play();
 
+        items = new Array<Item>();
+        itemsToSpawn = new PriorityQueue<ItemDef>();
+    }
+
+    public void spawnItem(ItemDef idef) {
+        itemsToSpawn.add(idef);
+    }
+
+    public void handleSpawningItems() {
+//        If not empty
+        if (!itemsToSpawn.isEmpty()) {
+//            poll = pop for a queue
+            ItemDef idef = itemsToSpawn.poll();
+            if (idef.type == Mushroom.class) {
+//                Add item to the array
+                items.add(new Mushroom(this, idef.position.x, idef.position.y));
+            }
+        }
     }
 
     public TextureAtlas getAtlas() {
@@ -121,6 +148,7 @@ public class PlayScreen implements Screen {
     public void update(float deltatime) {
 //        handle user input
         handleInput(deltatime);
+        handleSpawningItems();
 //      takes timestamp of velocity and position iterations - step(60 times second,velocity, position)
 //        Calls WorldContactListener, which implements ContactListener
 //        Cant delete bodies from world.step because simulation would not be finished
@@ -130,6 +158,7 @@ public class PlayScreen implements Screen {
         hud.update(deltatime);
         player.update(deltatime);
 
+//        Updating enemies
         for (Enemy enemy : creator.getGoombas()) {
             enemy.update(deltatime);
 //            Wake up body after getting close to it
@@ -137,6 +166,11 @@ public class PlayScreen implements Screen {
                 enemy.b2body.setActive(true);
             }
         }
+
+//        Updating items
+        for (Item item : items)
+            item.update(deltatime);
+
 //      track camera with a gamecam
         gameCam.position.x = player.b2body.getPosition().x;
         gameCam.position.y = player.b2body.getPosition().y;
@@ -173,8 +207,13 @@ public class PlayScreen implements Screen {
         game.batch.begin();
 //      Give game the player sprite
         player.draw(game.batch);
+//        Draw enemies
         for (Enemy enemy : creator.getGoombas())
             enemy.draw(game.batch);
+//        Draw items
+        for (Item item :items)
+            item.draw(game.batch);
+
 //        Close the textures batch
         game.batch.end();
 
