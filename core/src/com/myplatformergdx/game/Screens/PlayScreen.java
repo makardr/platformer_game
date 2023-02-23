@@ -27,6 +27,7 @@ import com.myplatformergdx.game.Tools.B2WorldCreator;
 import com.myplatformergdx.game.Tools.WorldContactListener;
 
 import java.util.PriorityQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class PlayScreen implements Screen {
     private MyPlatformerGame game;
@@ -54,7 +55,7 @@ public class PlayScreen implements Screen {
 
     //    Array of all items
     private Array<Item> items;
-    private PriorityQueue<ItemDef> itemsToSpawn;
+    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
     private B2WorldCreator creator;
 
 
@@ -99,7 +100,7 @@ public class PlayScreen implements Screen {
 //        music.play();
 
         items = new Array<Item>();
-        itemsToSpawn = new PriorityQueue<ItemDef>();
+        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
     }
 
     public void spawnItem(ItemDef idef) {

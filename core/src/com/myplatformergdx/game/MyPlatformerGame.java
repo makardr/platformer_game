@@ -44,6 +44,7 @@ public class MyPlatformerGame extends Game {
         manager.load("audio/sounds/coin.wav", Sound.class);
         manager.load("audio/sounds/bump.wav", Sound.class);
         manager.load("audio/sounds/breakblock.wav", Sound.class);
+        manager.load("audio/sounds/powerup_spawn.wav", Sound.class);
 //        Finishes loading and "boxes" resources2
         manager.finishLoading();
 
