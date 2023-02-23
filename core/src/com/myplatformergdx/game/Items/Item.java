@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Screens.PlayScreen;
+import com.myplatformergdx.game.Sprites.Protagonist;
 
 public abstract class Item extends Sprite {
     protected PlayScreen screen;
@@ -28,7 +29,7 @@ public abstract class Item extends Sprite {
 
     public abstract void defineItem();
 
-    public abstract void use();
+    public abstract void use(Protagonist mario);
 
     public void update(float dt) {
         if (toDestroy && !destroyed) {
@@ -36,6 +37,14 @@ public abstract class Item extends Sprite {
             destroyed = true;
         }
     }
+//    Every item has an ability to reverse velocity
+    public void reverseVelocity(boolean x, boolean y) {
+        if (x)
+            velocity.x = -velocity.x;
+        if (y)
+            velocity.y = -velocity.y;
+    }
+
 
     //    Overriding
     public void draw(Batch batch) {

@@ -6,9 +6,11 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.myplatformergdx.game.Items.Item;
 import com.myplatformergdx.game.MyPlatformerGame;
 import com.myplatformergdx.game.Enemies.Enemy;
 import com.myplatformergdx.game.Sprites.InteractiveTileObject;
+import com.myplatformergdx.game.Sprites.Protagonist;
 
 //Gets called when two fixtures in Box2d collide
 public class WorldContactListener implements ContactListener {
@@ -56,6 +58,25 @@ public class WorldContactListener implements ContactListener {
             case MyPlatformerGame.ENEMY_BIT | MyPlatformerGame.ENEMY_BIT:
                 ((Enemy) fixA.getUserData()).reverseVelocity(true, false);
                 ((Enemy) fixB.getUserData()).reverseVelocity(true, false);
+                break;
+            case MyPlatformerGame.ITEM_BIT | MyPlatformerGame.OBJECT_BIT:
+//                If the first fixture is not an item, then second is
+                if (fixA.getFilterData().categoryBits == MyPlatformerGame.ITEM_BIT)
+                    ((Item) fixA.getUserData()).reverseVelocity(true, false);
+                else
+                    ((Item) fixB.getUserData()).reverseVelocity(true, false);
+                break;
+
+//              Check if Mario and item collided and if they did it figures out which fixture is the Mario, which is item, and the uses an item
+            case MyPlatformerGame.ITEM_BIT | MyPlatformerGame.MARIO_BIT:
+//                System.out.println(fixA.getUserData());
+//                System.out.println(fixB.getUserData());
+//                If the first fixture is not an item, then second is
+                if (fixA.getFilterData().categoryBits == MyPlatformerGame.ITEM_BIT)
+//                    Fix b must be the Mario
+                    ((Item) fixA.getUserData()).use((Protagonist) fixB.getUserData());
+                else
+                    ((Item) fixB.getUserData()).use((Protagonist) fixA.getUserData());
                 break;
         }
     }

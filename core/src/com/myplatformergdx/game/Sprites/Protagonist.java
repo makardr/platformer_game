@@ -123,7 +123,8 @@ public class Protagonist extends Sprite {
                 MyPlatformerGame.BRICK_BIT |
                 MyPlatformerGame.ENEMY_BIT |
                 MyPlatformerGame.OBJECT_BIT |
-                MyPlatformerGame.ENEMY_HEAD_BIT;
+                MyPlatformerGame.ENEMY_HEAD_BIT|
+                MyPlatformerGame.ITEM_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
